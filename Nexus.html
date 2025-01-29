@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Event</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cream-background: #FAF9F6;
+            --soft-cream: #F5F3E7;
+            --cream-accent: #F1EEE4;
+            --text-primary: #3C4142;
+            --text-secondary: #6C7072;
+            --accent-color: #8B7E74;
+            --gold-highlight: #D4AF37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            background-color: var(--cream-background);
+            color: var(--text-primary);
+        }
+
+        /* Header with Background Image Space */
+        .header-container {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--soft-cream);
+            overflow: hidden;
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1600/400');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .header-content h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-content p {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        /* Section Styling */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--cream-accent);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Influencers Grid */
+        .influencers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .influencer-card {
+            background-color: var(--cream-accent);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .influencer-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .influencer-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Participants Scroll */
+        .scroll-section {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--cream-accent);
+        }
+
+        .scroll-section img {
+            height: 120px;
+            width: auto;
+            border-radius: 8px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .scroll-section img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Sponsors Section */
+        .sponsor-spot {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .sponsor-card {
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sponsor-card img {
+            height: 150px;
+            width: auto;
+            border-radius: 10px;
+            filter: grayscale(50%) opacity(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .sponsor-card:hover img {
+            filter: grayscale(0%) opacity(1);
+            transform: scale(1.05);
+        }
+
+        /* Ranking Table Styling */
+        #rankingTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        #rankingTable th, 
+        #rankingTable td {
+            border: 1px solid var(--cream-accent);
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        #rankingTable th {
+            background-color: var(--soft-cream);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Leading Participants Styling */
+        .leading-spot {
+            display: flex;
+            justify-content: space-around;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .leading-spot .participant {
+            text-align: center;
+            padding: 1.5rem;
+            border: 2px solid var(--gold-highlight);
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            background-color: #fff8dc;
+            width: 30%;
+            transition: transform 0.3s ease;
+        }
+
+        .leading-spot .participant:hover {
+            transform: translateY(-10px);
+        }
+
+        .leading-spot .participant h3 {
+            color: var(--gold-highlight);
+            margin-bottom: 0.75rem;
+        }
+
+        .leading-spot .participant p {
+            margin: 0.25rem 0;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header-container {
+                height: 300px;
+            }
+
+            .header-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-container {
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .leading-spot {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .leading-spot .participant {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div class="background-overlay"></div>
+        <div class="header-content">
+            <h1>Nexus Event</h1>
+            <h5>Connecting Brands, Inspiring Innovations</h5>
+
+        </div>
+    </div>
+
+    <div class="section-container">
+        <div class="section">
+            <h2 class="section-title">What is NEXUS?</h2>
+            <p>Nexus is a 7-day event designed to connect local businesses with the vibrant college student community of Indore. We are inviting Instagram influencers to join this unique campaign to boost their reach, enhance engagement, and collaborate with top brands while being a part of an innovative promotional experience.</p>
+            <h3 style="margin-top: 1rem; color: var(--accent-color);">Benefits for Participants</h3>
+            <ul style="margin-top: 0.5rem; padding-left: 1.5rem; list-style-type: disc;">
+                <li>Be part of a high-energy campaign targeting students from all colleges across Indore.</li>
+                <li>Direct access to students from multiple colleges in Indore AT ONCE.</li>
+                <li>Tap into a large, engaged audience with daily posts and stories reaching thousands.</li>
+                <li>Instagram channels with a combined following of 40k+ students.</li>
+                <li> WhatsApp communities with over 10K active members.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Influencers Involved</h2>
+            <div class="scroll-container">
+                <div class="scroll-wrapper">
+                    <div class="influencer-card">
+                        <h3>John Doe</h3>
+                        <p><a href="https://www.instagram.com/johndoe" target="_blank"><i class="fab fa-instagram"></i> @johndoe</a></p>
+                    </div>
+                    <div class="influencer-card">
+                        <h3>John Doe</h3>
+                        <p><a href="https://www.instagram.com/johndoe" target="_blank"><i class="fab fa-instagram"></i> @johndoe</a></p>
+                    </div>
+                    <div class="influencer-card">
+                        <h3>John Doe</h3>
+                        <p><a href="https://www.instagram.com/johndoe" target="_blank"><i class="fab fa-instagram"></i> @johndoe</a></p>
+                    </div>
+                    <div class="influencer-card">
+                        <h3>Jane Smith</h3>
+                        <p><a href="https://www.instagram.com/janesmith" target="_blank"><i class="fab fa-instagram"></i> @janesmith</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Whatsapp Groups Involved</h2>
+            <div class="scroll-container">
+            <div class="scroll-wrapper">
+                <div class="influencer-card">
+                <h3>IET DAVV</h3>
+                </div>
+                <div class="influencer-card">
+                <h3>SGSITS</h3>
+                </div>
+                <div class="influencer-card">
+                <h3>Medi-Caps</h3>
+                </div>
+                <div class="influencer-card">
+                <h3>IPS</h3>
+                </div>
+                <div class="influencer-card">
+                <h3>Acropolis</h3>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <style>
+            .scroll-container {
+            width: 100%;
+            overflow-x: auto;
+            padding: 1rem 0;
+            }
+
+            .scroll-wrapper {
+            display: flex;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            }
+
+            .scroll-wrapper .influencer-card {
+            min-width: 250px;
+            flex: 0 0 auto;
+            }
+        </style>
+
+        
+
+        <div class="section">
+            <h2 class="section-title">Participants</h2>
+            <div class="scroll-section">
+                <img src="/api/placeholder/200/120" alt="Brand 1 Logo">
+                <img src="/api/placeholder/200/120" alt="Brand 2 Logo">
+                <img src="/api/placeholder/200/120" alt="Brand 3 Logo">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Live Ranking Table</h2>
+            <table id="rankingTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Leading Participants</h2>
+            <div id="leadingParticipants" class="leading-spot">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script>
+        const spreadsheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSl3el878W37DxT7yjficNx733jY00UxV7aShY-VyfV6_83Sm3PNMWvo0WK-StLMN30RaGMubFDO4mR/pub?gid=0&single=true&output=csv"; // Replace with your CSV link
+
+        async function loadAndSortData() {
+            try {
+                const response = await fetch(spreadsheetURL);
+                const data = await response.text();
+                const rows = data.split("\n");
+
+                const tableBody = document.querySelector("#rankingTable tbody");
+                const leadingSpot = document.querySelector("#leadingParticipants");
+                tableBody.innerHTML = ""; // Clear existing table data
+                leadingSpot.innerHTML = ""; // Clear existing leading participants
+
+                const tableData = [];
+                rows.forEach((row, index) => {
+                    if (index === 0) return; // Skip header row
+                    const columns = row.split(",");
+                    if (columns.length >= 2) {
+                        tableData.push({
+                            name: columns[0].trim(),
+                            payment: parseFloat(columns[1].trim()) || 0,
+                        });
+                    }
+                });
+
+                // Sort by payment amount in descending order
+                tableData.sort((a, b) => b.payment - a.payment);
+
+                // Populate the table with sorted data
+                tableData.forEach((entry, rank) => {
+                    const tableRow = document.createElement("tr");
+
+                    const rankCell = document.createElement("td");
+                    rankCell.textContent = rank + 1;
+                    tableRow.appendChild(rankCell);
+
+                    const nameCell = document.createElement("td");
+                    nameCell.textContent = entry.name;
+                    tableRow.appendChild(nameCell);
+
+                    const paymentCell = document.createElement("td");
+                    paymentCell.textContent = entry.payment.toFixed(2); // Display payment as 2 decimal numbers
+                    tableRow.appendChild(paymentCell);
+
+                    tableBody.appendChild(tableRow);
+                });
+
+                // Highlight the top 3 participants
+                const topParticipants = tableData.slice(0, 3);
+                topParticipants.forEach((participant, index) => {
+                    const participantDiv = document.createElement("div");
+                    participantDiv.classList.add("participant");
+
+                    const position = ["🥇 First Place", "🥈 Second Place", "🥉 Third Place"][index];
+                    participantDiv.innerHTML = `
+                        <h3>${position}</h3>
+                        <p><strong>${participant.name}</strong></p>
+                        <p>Payment: ₹${participant.payment.toFixed(2)}</p>
+                    `;
+                    leadingSpot.appendChild(participantDiv);
+                });
+            } catch (error) {
+                console.error("Error loading or processing spreadsheet data:", error);
+            }
+        }
+
+        // Call the function when the page loads
+        window.addEventListener('load', loadAndSortData);
+    </script>
+</body>
+</html>
